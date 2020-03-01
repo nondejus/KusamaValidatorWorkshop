@@ -1,22 +1,31 @@
 # User Variables are declared here
 
-// GCP Project name, for example, `trustless2020`
-project_name = ""
+// Uncomment and fill in the relevant variables.
 
-// Path of the setup script, for example, `../scripts/setup.sh`
-script_path = ""
+// GCP Project name id, for example, `kusamavalidator` if the project is named KusamaValidator
+// project_name = ""
+
+// Name of the script to run after VM is provisioned. The default is "setup.sh"
+// script_path = ""
 
 // Path of the public SSH key, for example `../.ssh/id_rsa.pub`
-public_key_path = ""
+// public_key_path = ""
 
 // Path of the private SSH key, for example, `../.ssh/id_rsa`
-private_key_path = ""
+// private_key_path = ""
 
 // Path of the GCP service account credentials, for example, `../credentials.json`
-service_key_path = ""
+// service_key_path = ""
 
-// Username of the user accessing the host, for example $USER
-username = ""
+// Username of the user accessing the host, for example what $USER evaluates to
+// username = ""
 
-// URL of a tar file of a backed up DB
-db_url = ""
+// The name of the node on Telemetry
+// node_name = ""
+
+// URL of the telemetry server to connect to, for example "wss://telemetry-backend.w3f.community/submit" for the Thousand Validators Programme.
+// If this is not supplied or is null, the node will connect to the default telemetry endpoint.
+// telemetry_url = ""
+
+//Optional URL of a stored backup db. Supplying this will download the db and sync from there instead of the beginning
+// db_url = ""

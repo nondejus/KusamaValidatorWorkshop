@@ -17,8 +17,8 @@ variable "zone_name" {
 
 variable "machine_type" {
   type        = string
-  description = "The machine type that this instance will be"
-  default     = "n1-standard-8"
+  description = "The machine type that this instance will be."
+  default     = "n1-standard-2"
 }
 
 variable "image_name" {
@@ -33,9 +33,14 @@ variable "image_size" {
   default     = "100"
 }
 
-variable "script_path" {
-  type        = string
-  description = "Where is the path to the script locally on the machine"
+variable "script_name"{
+  type = string 
+  description = "The name of the script to get run after provisioning"
+}
+
+variable "node_name" {
+  type = string
+  description = "The name of the node"
 }
 
 variable "public_key_path" {
@@ -60,6 +65,12 @@ variable "username" {
 
 variable "db_url" {
   type = string
+  default= ""
   description = "Optional URL of a stored backup db. Supplying this will download the db and sync from there instead of the beginning"
+}
+
+variable "telemetry_url" {
+  type = string
+  description = "Private telemetry url to connect to. Leaving this blank will result in the default telemetry endpoint."
 }
 

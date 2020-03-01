@@ -42,20 +42,9 @@ resource "google_compute_instance" "default" {
     }
   }
 
-  // provisioner "remote-exec" {
-  //   script = var.script_path
-
-  //   connection {
-  //     type        = "ssh"
-  //     host        = google_compute_address.static.address
-  //     user        = var.username
-  //     private_key = file(var.private_key_path)
-  //   }
-  // }
-
   provisioner "file" {
-    source = var.script_path
-    destination = "/tmp/setup.sh"
+    source = "../scripts/${var.script_name}"
+    destination = "/tmp/${var.script_name}"
 
 
     connection {
@@ -68,8 +57,11 @@ resource "google_compute_instance" "default" {
 
   provisioner "remote-exec" {
     inline = [
-      "chmod +x /tmp/setup.sh",
-      "/tmp/setup.sh ${var.db_url}"
+      "chmod +x /tmp/${var.script_name}",
+      "[ -z ${var.node_name} ] && NAME_FLAG='' || NAME_FLAG='-n ${var.node_name}'",
+      "[ -z ${var.telemetry_url} ] && TELEMETRY_FLAG='' || TELEMETRY_FLAG='-t ${var.telemetry_url}'",
+      "[ -z ${var.db_url} ] && DB_FLAG='' || DB_FLAG='-d ${var.db_url}'",
+      "/tmp/${var.script_name} $NAME_FLAG $TELEMETRY_FLAG $DB_FLAG "
     ]
         
     connection {
