@@ -1,50 +1,65 @@
 # Getting Started
 
-## Create a Google Cloud Platform Account
+The following will help get up and running with a Kusama validator node.
+
+## Setting up a VPS
+
+Nodes can run in the cloud, on bare metal, or on-premise. While on-premise and bare metal is preferred, the following proposes cloud providers like GCP, as they provided free credits that allow you go get up and running with little finincial commitment at first. It's recommended that nodes get spread out throughout multiple cloud providers and datacenters, the following should be a starting point to further refine your setup.
+
+## GCP
+### Create a Google Cloud Platform Account
 
 1. Create an account on Google Cloud Platform
-2. Create a project on Google Cloud Platform, for example `Trustles2020`
-3. [Create a service account key](https://console.cloud.google.com/apis/credentials/serviceaccountkey?_ga=2.200408430.115747434.1580487834-927118280.1575805433&_gac=1.55674585.1580204272.CjwKCAiA1L_xBRA2EiwAgcLKAz_8bCEQ_Lu6p8_iKNfze_a3QBpKDqtMi9UoAWKlJXbpQOW9aBkDcxoC254QAvD_BwE), rename it to `credentials.json`, and place it in the repository root folder. 
+2. Create a project on Google Cloud Platform, for example `KusamaValidator`
+   ![](img/gcp1.png)
+   ![](img/gcp2.png)
+
+3. After Compute Engine intializes (it may take a few minutes), [create a Compute Engine service account key](https://console.cloud.google.com/apis/credentials/serviceaccountkey?_ga=2.200408430.115747434.1580487834-927118280.1575805433&_gac=1.55674585.1580204272.CjwKCAiA1L_xBRA2EiwAgcLKAz_8bCEQ_Lu6p8_iKNfze_a3QBpKDqtMi9UoAWKlJXbpQOW9aBkDcxoC254QAvD_BwE), rename it to `credentials.json`, and place it in the repository root folder. 
+![](img/gcp3.png)
 
 ## Install Terraform
 
-1. [Install the Terraform binary](https://learn.hashicorp.com/terraform/getting-started/install.html).
+1. [Install the Terraform binary to the local machine](https://learn.hashicorp.com/terraform/getting-started/install.html)
 
 ## Setup SSH Keys
 
-1. Run `./scripts/gen_ssh_key.sh`, or create a new ssh pair named `id_rsa` in the `.ssh` directory of this project
+1. Run `./scripts/gen_ssh_key.sh` from the root directory of the project, or create a new ssh pair named `id_rsa` in the `.ssh` directory of this project
 2. update terraform.tfvars to have the `public_key_path` and `private_key_path` correspond to the public and private ssh keys that were just generated.
-3. 
 
 
 ## Set up `terraform.tfvars`
 Fill in the following:
 
-// GCP Project name, for example, `trustless2020`
+// GCP Project name id, for example, the id is `kusamavalidator` if the project name is `KusamaValidator`
+![](img/gcp4.png)
 project_name = ""
 
-// Path of the setup script, for example, `../scripts/setup.sh`
-script_path = ""
+// Name of the setup script located in the `scripts` directory, for example, `setup.sh` from `../scripts/setup.sh`
+script_name = ""
 
-// Path of the public SSH key, for example `../.ssh/id_rsa.pub`
+// Path of the public SSH key, for example `../.ssh/id_rsa.pub` if you created the ssh keys using the `scripts/generate_ssh_keys.sh` bash script
 public_key_path = ""
 
-// Path of the private SSH key, for example, `../.ssh/id_rsa`
+// Path of the private SSH key, for example, `../.ssh/id_rsa` if you created the ssh keys using the `scripts/generate_ssh_keys.sh` bash script
 private_key_path = ""
 
-// Path of the GCP service account credentials, for example, `../credentials.json`
+// Path of the GCP service account credentials, for example, `../credentials.json` located in the root of the project directory
 service_key_path = ""
 
-// Username of the user accessing the host, for example $USER
+// Username of the user accessing the host, for example the output of `echo $USER`
 username = ""
 
-// URL of a tar file of a backed up DB
+// (Optional) URL of a tar file of a backed up DB - this is if you backup your db folder to a tar file and upload it to some url. If so, the file will be downloaded and unpacked to the `/db` folder before the node is run.
 db_url = ""
 
 
 ## Run Terraform scripts
 
-1. `cd terraform`, and `terraform apply`. This should take ~10 minutes for the node to start syncing
+1. Move into the terraform directory: `cd terraform`
+2. Initialize configure Terraform backend: `terraform init`
+3. Validate the terraform configuration to ensure there are no errors: `terraform validate`
+4. Create execution plan: `terraform plan`
+5. Te and `terraform apply`. This should take ~10 minutes for the node to start syncing
 
 ## Create Session Keys
 
