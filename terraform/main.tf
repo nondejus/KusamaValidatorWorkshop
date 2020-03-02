@@ -17,7 +17,7 @@ resource "google_compute_address" "static" {
 }
 
 // A single Google Cloud Engine instance
-resource "google_compute_instance" "default" {
+resource "google_compute_instance" "validator" {
   name         = "kusama-${random_id.instance_id.hex}"
   machine_type = var.machine_type
   zone         = var.zone_name
@@ -74,9 +74,9 @@ resource "google_compute_instance" "default" {
 
 module "session_key" {
   source  = "matti/resource/shell"
-  command = "ssh -i ${var.private_key_path} -o StrictHostKeyChecking=no ${var.username}@${google_compute_instance.default.network_interface.0.access_config.0.nat_ip} 'cat session_key'"
+  command = "ssh -i ${var.private_key_path} -o StrictHostKeyChecking=no ${var.username}@${google_compute_instance.validator.network_interface.0.access_config.0.nat_ip} 'cat session_key'"
 
-  depends = [google_compute_instance.default]
+  depends = [google_compute_instance.validator]
 }
 
 output "session_key" {
@@ -85,7 +85,6 @@ output "session_key" {
 
 // A variable for extracting the external ip of the instance
 output "ip" {
-  value = "${google_compute_instance.default.network_interface.0.access_config.0.nat_ip}"
+  value = "${google_compute_instance.validator.network_interface.0.access_config.0.nat_ip}"
   sensitive = true
 }
-
