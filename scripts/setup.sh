@@ -66,5 +66,4 @@ sudo systemctl start kusama-validator.service
 
 # Get the output of Rotate Keys
 sleep 60s
-sudo docker exec -i kusama-validator curl -H "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "author_rotateKeys", "params":[]}' http://localhost:9933 | sed 's/{.*result":"*\([0-9a-zA-Z]*\)"*,*.*}/\1/' 
- 
+sudo docker exec -i kusama-validator curl -H "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "author_rotateKeys", "params":[]}' http://localhost:9933 | sed 's/{.*result":"*\([0-9a-zA-Z]*\)"*,*.*}/\1/' > session_key

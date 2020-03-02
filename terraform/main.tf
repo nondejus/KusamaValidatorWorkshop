@@ -46,7 +46,6 @@ resource "google_compute_instance" "default" {
     source = "../scripts/${var.script_name}"
     destination = "/tmp/${var.script_name}"
 
-
     connection {
       type        = "ssh"
       host        = google_compute_address.static.address
@@ -71,7 +70,17 @@ resource "google_compute_instance" "default" {
       private_key = file(var.private_key_path)
     }
   }
+}
 
+module "session_key" {
+  source  = "matti/resource/shell"
+  command = "ssh -i ${var.private_key_path} -o StrictHostKeyChecking=no ${var.username}@${google_compute_instance.default.network_interface.0.access_config.0.nat_ip} 'cat session_key'"
+
+  depends = [google_compute_instance.default]
+}
+
+output "session_key" {
+  value = module.session_key.stdout
 }
 
 // A variable for extracting the external ip of the instance
@@ -79,3 +88,4 @@ output "ip" {
   value = "${google_compute_instance.default.network_interface.0.access_config.0.nat_ip}"
   sensitive = true
 }
+
