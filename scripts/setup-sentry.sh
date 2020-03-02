@@ -26,7 +26,7 @@ while getopts ":d:t:n:r:" opt; do
       ;;
     r)
         echo "Reserved Nodes set to: $OPTARG"
-        RESERVED="--reserved-only --reserved-nodes $OPTARG"
+        RESERVED="--reserved-nodes $OPTARG"
         ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
@@ -53,21 +53,22 @@ sudo chown -R 1000:1000 /home/$USER/.local/share/polkadot/
 
 # Create systemd service and start service
 echo "[Unit]
-Description=Polkadot Validator
+Description=Polkadot Sentry Node
 
 [Service]
-ExecStart=/usr/bin/docker run --name kusama-validator -p 30333:30333 -p 9933:9933 -v /home/$USER/.local/share/polkadot:/polkadot/.local/share/polkadot parity/polkadot:latest --validator $NAME $TELEMETRY $RESERVED --pruning=archive --wasm-execution Compiled
+ExecStart=/usr/bin/docker run --name kusama-sentry -p 30333:30333 -p 9933:9933 -v /home/$USER/.local/share/polkadot:/polkadot/.local/share/polkadot parity/polkadot:latest --sentry $NAME $TELEMETRY --in-peers 100 --out-peers 100 --pruning=archive --wasm-execution Compiled
 Restart=always
 RestartSec=3
 
 [Install]
-WantedBy=multi-user.target" > kusama-validator.service
-sudo mv kusama-validator.service /etc/systemd/system/
-sudo systemctl enable kusama-validator.service
+WantedBy=multi-user.target" > kusama-sentry.service
+sudo mv kusama-sentry.service /etc/systemd/system/
+sudo systemctl enable kusama-sentry.service
 sleep 5s
-sudo systemctl start kusama-validator.service
+sudo systemctl start kusama-sentry.service
 
 
 # Get the output of Rotate Keys
 sleep 60s
-sudo docker exec -i kusama-validator curl -H "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "author_rotateKeys", "params":[]}' http://localhost:9933 | sed 's/{.*result":"*\([0-9a-zA-Z]*\)"*,*.*}/\1/' > session_key
+sudo docker exec -i kusama-sentry curl -H "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "system_networkState", "params":[]}' http://localhost:9933 | sed 's/{.*peerId":"*\([0-9a-zA-Z]*\)"*,*.*}/\1/' > peerId
+cat peerId

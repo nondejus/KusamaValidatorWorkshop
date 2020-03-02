@@ -33,13 +33,13 @@ variable "image_size" {
   default     = "100"
 }
 
-variable "script_name"{
-  type = string 
+variable "script_name" {
+  type        = string
   description = "The name of the script to get run after provisioning"
 }
 
 variable "node_name" {
-  type = string
+  type        = string
   description = "The name of the node"
 }
 
@@ -64,13 +64,13 @@ variable "username" {
 }
 
 variable "db_url" {
-  type = string
-  default= ""
+  type        = string
+  default     = ""
   description = "Optional URL of a stored backup db. Supplying this will download the db and sync from there instead of the beginning"
 }
 
 variable "telemetry_url" {
-  type = string
+  type        = string
   description = "Private telemetry url to connect to. Leaving this blank will result in the default telemetry endpoint."
 }
 
