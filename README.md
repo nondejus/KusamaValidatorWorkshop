@@ -26,8 +26,9 @@ Nodes can run in the cloud, on bare metal, or on-premise. While on-premise and b
 1. Run `./scripts/gen_ssh_key.sh` from the root directory of the project, or create a new ssh pair named `id_rsa` in the `.ssh` directory of this project
 2. update terraform.tfvars to have the `public_key_path` and `private_key_path` correspond to the public and private ssh keys that were just generated.
 
+## Configuring Terraform
 
-## Set up `terraform.tfvars`
+### Set up `terraform.tfvars`
 Fill in the following:
 
 // GCP Project name id, for example, the id is `kusamavalidator` if the project name is `KusamaValidator`
@@ -63,8 +64,8 @@ db_url = ""
 
 ## Create Session Keys
 
-1. After the node is syncing, SSH into the box:
-   
+1. After the node is syncing, SSH into the box from the `/terraform` folder:
+
    ```
    ssh -i ../.ssh/id_rsa `terraform output ip`
    ```
